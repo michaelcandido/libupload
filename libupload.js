@@ -1,39 +1,58 @@
 
-function upload(form, onComplete) {
+var libupload = (function () {
 
-  var document = fileInput.ownerDocument;
+  function upload(form, onStart, onComplete) {
 
-  var iframe = document.createElement('iframe');
-  iframe.style.height = 0;
-  iframe.style.width = 0;
-  iframe.style.border = 'none';
-  iframe.name = 'libupload_iframe' + Date.now();
+    var document = form.ownerDocument;
 
-  function onload() {
-    if (iframe.removeEventListener)
-      iframe.removeEventListener(onload);
-    else if (iframe.detachEvent)
-      iframe.detachEvent(onload);
+    var iframe = document.createElement('iframe');
+    iframe.style.height = 0;
+    iframe.style.width = 0;
+    iframe.style.border = 'none';
+    iframe.name = 'libupload_iframe' + Date.now();
 
-    if (iframe.contentDocument)
-      var response = iframe.contentDocument.body.innerHTML;
-    else if (iframe.contentWindow)
-      var response = iframe.contentWindow.document.body.innerHTML;
-    else if (iframe.document)
-      var response = iframe.document.body.innerHTML;
+    function onload() {
+      form.reset();
+      if (iframe.removeEventListener)
+        iframe.removeEventListener('load', onload);
+      else if (iframe.detachEvent)
+        iframe.detachEvent(onload);
 
-    if (onComplete)
-      onComplete(response);
+      if (iframe.contentDocument)
+        var response = iframe.contentDocument.body.innerHTML;
+      else if (iframe.contentWindow)
+        var response = iframe.contentWindow.document.body.innerHTML;
+      else if (iframe.document)
+        var response = iframe.document.body.innerHTML;
 
-    setTimeout(function () { iframe.parentNode.removeChild(iframe); }, 0);
+      if (onComplete)
+        onComplete(response);
+
+      setTimeout(function () { iframe.parentNode.removeChild(iframe); }, 0);
+    }
+
+    if (iframe.addEventListener)
+      iframe.addEventListener('load', onload);
+    else if (iframe.attachEvent)
+      iframe.attachEvent('onload', onload);
+
+    form.target = iframe.name;
+    document.body.appendChild(iframe);
+
+    if (onStart) {
+      var fileMap = {};
+      for (var i = 0; i < form.elements.length; i++) {
+        var input = form.elements[i];
+        if (input.type == 'file' && input.name)
+          fileMap[input.name] = input.value;
+      }
+      onStart(fileMap);
+    }
+    form.submit();
   }
 
-  if (iframe.addEventListener)
-    iframe.addEventListener('onload', onload);
-  else if (iframe.attachEvent)
-    iframe.attachEvent('onload', onload);
+  return {
+    upload: upload
+  };
 
-  form.target = iframe.name;
-  document.body.appendChild(iframe);
-  form.submit();
-}
+})();
