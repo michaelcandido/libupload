@@ -20,11 +20,24 @@ var libupload = (function () {
     return fileMap;
   }
 
+  /**
+   * Asynchronously submit a form with file inputs and fetch the
+   * server response.
+   *
+   * @param {HTMLFormElement} form   the form to submit
+   * @param {function} onStart       called with a map of input
+   *                                 names to file names when
+   *                                 starting the upload
+   * @param {function} onComplete    called with the server
+   *                                 response when the upload has
+   *                                 completed
+   */
   function upload(form, onStart, onComplete) {
 
     var document = form.ownerDocument, isSubmitted = false;
 
     function onload() {
+      // some browsers fire load upon appending the iframe
       if (!isSubmitted)
         return;
       
