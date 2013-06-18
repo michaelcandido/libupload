@@ -29,10 +29,6 @@ var libupload = (function () {
         return;
       
       form.reset();
-      if (this.removeEventListener)
-        this.removeEventListener('load', onload);
-      else if (this.detachEvent)
-        this.detachEvent(onload);
 
       var response = this.contentDocument.body.innerHTML;
       if (onComplete)
