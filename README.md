@@ -28,7 +28,7 @@ Example:
         alert('server response is ' + response);
       }
     
-      document.getElementById('upload').onclick = function ()
+      document.getElementById('upload').onclick = function () {
         libupload.upload(document.forms[0], onstart, oncomplete);
       };
     </script>
