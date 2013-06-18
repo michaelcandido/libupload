@@ -7,7 +7,7 @@ This library fills a niche for a dead simple, spiritually AJAX file upload tool 
 
 Example:
 
-```
+```html
 <html>
   <head>
     <title>Demo</title>
@@ -19,20 +19,18 @@ Example:
       <input type='hidden' name='extra-parameter' value='2' />
     </form>
     <input type='button' id='upload' value='Upload File' />
-    <script type='text/javascript'>
+    <script type='text/javascript'>    
+      function onstart(fileMap) {
+        alert('filename is ' + fileMap['file-data']);
+      }
     
-    var form = document.forms[0];
+      function oncomplete(response) {
+        alert('server response is ' + response);
+      }
     
-    function onstart(fileMap) {
-      alert('filename is ' + fileMap['file-data']);
-    }
-    
-    function oncomplete(response) {
-      alert('server response is ' + response);
-    }
-    
-    libupload.upload(form, onstart, oncomplete);
-    
+      document.getElementById('upload').onclick = function ()
+        libupload.upload(document.forms[0], onstart, oncomplete);
+      };
     </script>
   </body>
 </html>
