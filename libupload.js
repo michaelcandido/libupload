@@ -1,5 +1,19 @@
+/**
+ * @module libupload
+ * @author Michael Candido
+ *
+ * A barebones library for performing file uploads without a page
+ * reload. Uses the iframe hack so that it is compatible with
+ * non-html5 browsers.
+ */
+(function (factory) {
+  
+  if (typeof define === 'function' && define.amd)
+    define([], factory);
+  else
+    this.libupload = factory();
 
-var libupload = (function () {
+})(function () {
 
   function createIframe(document) {
     var iframe = document.createElement('iframe');
@@ -62,8 +76,6 @@ var libupload = (function () {
     isSubmitted = true;
   }
 
-  return {
-    upload: upload
-  };
+  return { upload: upload };
 
-})();
+});
