@@ -6,6 +6,7 @@
  * non-html5 browsers.
  *
  * @module libupload
+ * @version 1.0
  * @copyright Michael Candido 2013
  */
 (function (factory) {
